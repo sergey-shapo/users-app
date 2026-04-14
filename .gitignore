@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+# IDE / AI
+.qwen
+.github/workflows

@@ -1,96 +1,135 @@
-# Nuxt Starter Template
+# Users App
 
 [![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
 
-Use this template to get started with [Nuxt UI](https://ui.nuxt.com) quickly.
+Aplicación de gestión de usuarios construida con [Nuxt 4](https://nuxt.com/) y [Nuxt UI](https://ui.nuxt.com).
 
-- [Live demo](https://starter-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
+- **Repositorio:** <https://github.com/sergey-shapo/users-app>
+- **Stack:** Nuxt 4 · Vue 4 · TypeScript · Nuxt UI · Tailwind CSS
 
-<a href="https://starter-template.nuxt.dev/" target="_blank">
+<a href="https://github.com/sergey-shapo/users-app" target="_blank">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-dark.png">
     <source media="(prefers-color-scheme: light)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
-    <img alt="Nuxt Starter Template" src="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png" width="830" height="466">
+    <img alt="Users App" src="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png" width="830" height="466">
   </picture>
 </a>
 
-> The starter template for Vue is on https://github.com/nuxt-ui-templates/starter-vue.
+## Funcionalidades
+
+- **Listado de usuarios** en tabla con columnas: Identificador, Nombre completo, Nombre, Email, Rol, Estado, Detalle.
+- **Búsqueda** por nombre, apellido o email.
+- **Filtrado** por rol (Admin, User, Moderator) y estado (Active, Inactive, Pending).
+- **Paginación**.
+- **Creación de usuarios** con validación de formulario.
+- **Vista de detalle** de cada usuario.
 
 ## Quick Start
 
-```bash [Terminal]
-npm create nuxt@latest -- -t ui
-```
-
-## Deploy your own
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=starter&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fstarter&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fstarter-dark.png&demo-url=https%3A%2F%2Fstarter-template.nuxt.dev%2F&demo-title=Nuxt%20Starter%20Template&demo-description=A%20minimal%20template%20to%20get%20started%20with%20Nuxt%20UI.)
-
-## Setup
-
-Make sure to install the dependencies:
-
 ```bash
+# Instalar dependencias
 pnpm install
-```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
+# Iniciar servidor de desarrollo
 pnpm dev
 ```
 
-## Production
+La aplicación estará disponible en `http://localhost:3000`.
 
-Build the application for production:
+## Scripts disponibles
 
-```bash
-pnpm build
+| Comando          | Descripción                           |
+| ---------------- | ------------------------------------- |
+| `pnpm dev`       | Inicia el servidor de desarrollo      |
+| `pnpm build`     | Compila la aplicación para producción |
+| `pnpm preview`   | Previsualiza la build de producción   |
+| `pnpm lint`      | Ejecuta ESLint                        |
+| `pnpm typecheck` | Verifica tipos TypeScript             |
+
+## Estructura del proyecto
+
+```
+├── app/
+│   ├── pages/usuarios/     # Rutas: listado, detalle, nuevo
+│   ├── components/         # Componentes reutilizables
+│   ├── composables/        # Composables (useUsers)
+│   ├── types/              # Tipos TypeScript
+│   └── app.vue             # Componente raíz
+├── server/
+│   ├── api/users/          # API REST (listado, detalle, crear)
+│   └── utils/              # Utilidades (users-store)
+├── Dockerfile              # Configuración Docker multi-stage
+├── docker-compose.yml      # Orquestación con Docker Compose
+└── package.json
 ```
 
-Locally preview production build:
+## Despliegue con Docker
+
+### Requisitos
+
+- [Docker](https://docs.docker.com/get-docker/) instalado en tu sistema.
+- [Docker Compose](https://docs.docker.com/compose/install/) (incluido en Docker Desktop).
+
+### Opción 1: Docker Compose (recomendado)
 
 ```bash
-pnpm preview
+# Construir y ejecutar
+docker compose up --build -d
+
+# Ver logs
+docker compose logs -f
+
+# Detener
+docker compose down
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+La aplicación estará disponible en `http://localhost:3000`.
 
-## Docker
-
-The project can be run with Docker. Make sure you have Docker installed on your system.
-
-### Build and run with Docker Compose
+### Opción 2: Docker directamente
 
 ```bash
-docker compose up --build
-```
-
-The application will be available at `http://localhost:3000`.
-
-### Build and run with Docker directly
-
-```bash
-# Build the image
+# Construir la imagen
 docker build -t users-app .
 
-# Run the container
-docker run -p 3000:3000 users-app
+# Ejecutar el contenedor
+docker run -d -p 3000:3000 --name users-app users-app
+
+# Ver logs
+docker logs -f users-app
+
+# Detener y eliminar
+docker stop users-app && docker rm users-app
 ```
 
-### Stop the container
+### Healthcheck
 
-```bash
-# With Docker Compose
-docker compose down
+El contenedor incluye un healthcheck que verifica que la aplicación responde correctamente en `http://localhost:3000/`.
 
-# Or stop the specific container
-docker stop users-app
-```
+### Dockerfile (multi-stage)
 
-## Renovate integration
+| Etapa     | Descripción                              |
+| --------- | ---------------------------------------- |
+| `base`    | Node.js 20 Alpine + pnpm                 |
+| `deps`    | Instalación de dependencias con lockfile |
+| `builder` | Build de la aplicación Nuxt              |
+| `runner`  | Imagen final minimal con usuario no-root |
 
-Install [Renovate GitHub app](https://github.com/apps/renovate/installations/select_target) on your repository and you are good to go.
+## Tecnología
+
+- **[Nuxt 4](https://nuxt.com/)** — Framework Vue full-stack
+- **[Nuxt UI](https://ui.nuxt.com/)** — Componentes UI basados en Tailwind
+- **[TypeScript](https://www.typescriptlang.org/)** — Tipado estático
+- **[Tailwind CSS](https://tailwindcss.com/)** — CSS utility-first
+- **[Docker](https://www.docker.com/)** — Contenedores para despliegue
+
+## Sobre este proyecto
+
+Este proyecto fue desarrollado con el apoyo de inteligencia artificial (Qwen Code), que aceleró la generación de código repetitivo y la implementación de componentes UI. El desarrollador mantuvo **supervisión completa** sobre:
+
+- **Arquitectura** — Diseño de la estructura, rutas, API y flujo de datos.
+- **Validación y tipado** — Revisión y corrección de tipos TypeScript, errores de compilación y lógica de negocio.
+- **UX/UI** — Decisiones de diseño y experiencia de usuario.
+- **Orquestación** — Selección de tecnologías y despliegue.
+- **Calidad del código** — Refactorización, patrones de diseño y buenas prácticas.
+
+La IA funcionó como asistente de productividad; la visión técnica, las decisiones de ingeniería y el control de calidad fueron responsabilidad del desarrollador.
