@@ -124,7 +124,7 @@ El contenedor incluye un healthcheck que verifica que la aplicación responde co
 
 ## Sobre este proyecto
 
-Este proyecto fue desarrollado con el apoyo de inteligencia artificial (Qwen Code), que aceleró la generación de código repetitivo y la implementación de componentes UI. El desarrollador mantuvo **supervisión completa** sobre:
+Este proyecto fue desarrollado con el apoyo de inteligencia artificial, que aceleró la generación de código repetitivo y la implementación de componentes UI. El desarrollador mantuvo **supervisión completa** sobre:
 
 - **Arquitectura** — Diseño de la estructura, rutas, API y flujo de datos.
 - **Validación y tipado** — Revisión y corrección de tipos TypeScript, errores de compilación y lógica de negocio.
