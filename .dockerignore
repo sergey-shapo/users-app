@@ -1,0 +1,14 @@
+node_modules
+.nuxt
+.output
+.git
+.gitignore
+.env
+.env.*
+.vscode
+.idea
+*.md
+!README.md
+docker-compose.yml
+Dockerfile
+.dockerignore
